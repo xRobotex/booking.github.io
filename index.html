@@ -3,216 +3,35 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Skyvora Air - Book Your Flight</title>
+  <title>Skyvora Air Booking</title>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
   <style>
-    /* Your existing styles here... */
-    /* ... (styles unchanged) ... */
-    body {
-      font-family: 'Comic Sans MS', cursive, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(to right, #e0f7fa, #f1f8ff);
-      color: #333;
-    }
-    header {
-      background-color: #66ccff;
-      padding: 20px;
-      text-align: center;
-      border-bottom: 4px solid #004d99;
-    }
-    header h1 {
-      margin: 0;
-      font-size: 2.8rem;
-      color: #ffffff;
-      text-shadow: 1px 1px 2px #004d99;
-    }
-    header p {
-      margin: 5px 0 0;
-      font-size: 1.1rem;
-      color: #f0faff;
-    }
-    .booking-section {
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      padding: 40px 20px;
-      gap: 40px;
-      flex-wrap: wrap;
-    }
-    .booking-form {
-      background-color: #ffffff;
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-      width: 100%;
-      max-width: 420px;
-    }
-    .booking-form h2 {
-      margin-bottom: 20px;
-      color: #003366;
-    }
-    .booking-form label {
-      display: block;
-      margin-top: 15px;
-      font-weight: bold;
-      color: #005580;
-    }
-    .booking-form input,
-    .booking-form select {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border: 2px solid #cce7ff;
-      border-radius: 12px;
-      font-size: 1rem;
-      transition: border 0.2s ease;
-      outline: none;
-    }
-    .booking-form input:focus,
-    .booking-form select:focus {
-      border-color: #3399ff;
-    }
-    .booking-form button {
-      margin-top: 25px;
-      width: 100%;
-      padding: 12px;
-      background-color: #3399ff;
-      border: none;
-      border-radius: 14px;
-      color: white;
-      font-size: 1.1rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-    .booking-form button:hover {
-      background-color: #007acc;
-    }
-    .kit-selection {
-      margin-top: 15px;
-      padding: 15px;
-      border: 1px solid #3399ff;
-      border-radius: 12px;
-      background-color: #e6f2ff;
+    /* Add any necessary styles */
+    #kitSelection {
       display: none;
-    }
-    .kit-selection label {
-      font-weight: normal;
-      color: #003366;
-      margin-right: 15px;
-    }
-    .upcoming-flights {
-      max-width: 300px;
-      background-color: #ffffff;
-      padding: 20px;
-      border-radius: 20px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-      font-size: 0.95rem;
-      color: #003366;
-    }
-    .upcoming-flights h3 {
-      margin-top: 0;
-      color: #004d99;
-    }
-    .menu-link {
-      margin-top: 10px;
-      display: inline-block;
-      color: #007acc;
-      cursor: pointer;
-      text-decoration: underline;
-      font-size: 0.9rem;
-    }
-    footer {
-      text-align: center;
-      padding: 20px;
-      font-size: 0.9rem;
-      background-color: #f1f1f1;
-      color: #555;
-      margin-top: 40px;
-    }
-    #loginSection {
-      max-width: 420px;
-      margin: 20px auto;
-      padding: 15px 20px;
-      background: #ffffff;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-      font-size: 1rem;
-      color: #003366;
-      text-align: center;
-    }
-    #loginSection input {
-      padding: 8px 10px;
-      border-radius: 8px;
-      border: 2px solid #cce7ff;
-      font-size: 1rem;
-      margin-right: 8px;
-      width: 180px;
-      outline: none;
-      transition: border 0.2s ease;
-    }
-    #loginSection input:focus {
-      border-color: #3399ff;
-    }
-    #loginSection button {
-      padding: 9px 16px;
-      background-color: #3399ff;
-      border: none;
-      border-radius: 12px;
-      color: white;
-      cursor: pointer;
-      font-weight: bold;
-      font-size: 1rem;
-      transition: background-color 0.3s ease;
-    }
-    #loginSection button:hover {
-      background-color: #007acc;
     }
     #viewBookingsBtn {
       display: none;
-      margin: 20px auto;
-      padding: 12px 24px;
-      background-color: #3399ff;
-      border: none;
-      border-radius: 14px;
-      color: white;
-      font-size: 1.1rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      max-width: 420px;
-      display: block;
-      text-align: center;
-    }
-    #viewBookingsBtn:hover {
-      background-color: #007acc;
+      margin-top: 15px;
     }
     #bookingsSection {
-      max-width: 420px;
-      margin: 0 auto 40px auto;
-      background: #ffffff;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-      padding: 20px;
-      color: #003366;
       display: none;
-    }
-    #bookingsSection h3 {
-      margin-top: 0;
-      color: #004d99;
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>🛫 Skyvora Air</h1>
-    <p>Reach the skies of Robloxia with style!</p>
-  </header>
+  <h1>Skyvora Air Flight Booking</h1>
 
   <!-- LOGIN SECTION -->
   <div id="loginSection">
     <label for="usernameInput">Enter your name:</label>
     <input type="text" id="usernameInput" placeholder="Your name" />
+    <br /><br />
+    <label for="userIdInput">Enter your User ID:</label>
+    <input type="text" id="userIdInput" placeholder="e.g., 21131234" />
+    <br /><br />
     <button id="loginButton">Login</button>
   </div>
 
@@ -225,61 +44,44 @@
     <ul id="bookingsList"></ul>
   </div>
 
-  <main class="booking-section">
-    <form class="booking-form" id="bookingForm">
-      <h2>Book Your Flight</h2>
+  <!-- BOOKING FORM -->
+  <form id="bookingForm">
+    <label for="from">From:</label>
+    <input type="text" id="from" name="from" required />
+    <br /><br />
+    <label for="to">To:</label>
+    <input type="text" id="to" name="to" required />
+    <br /><br />
+    <label for="date">Date:</label>
+    <input type="date" id="date" name="date" required />
+    <br /><br />
+    <label for="passengers">Passengers:</label>
+    <input type="number" id="passengers" name="passengers" min="1" required />
+    <br /><br />
+    <label for="class">Class:</label>
+    <select id="class" name="class" required>
+      <option value="">Select class</option>
+      <option value="economy">Economy</option>
+      <option value="business">Business</option>
+      <option value="first">First</option>
+    </select>
+    <br /><br />
 
-      <label for="from">From</label>
-      <input type="text" id="from" name="from" placeholder="e.g., Bloxburg" required />
+    <!-- Kit selection visible only for First class -->
+    <div id="kitSelection">
+      <label><input type="checkbox" value="meal" /> Meal Kit</label><br />
+      <label><input type="checkbox" value="entertainment" /> Entertainment Kit</label><br />
+      <label><input type="checkbox" value="comfort" /> Comfort Kit</label>
+    </div>
+    <br />
 
-      <label for="to">To</label>
-      <input type="text" id="to" name="to" placeholder="e.g., Brookhaven" required />
-
-      <label for="date">Departure Date</label>
-      <input type="date" id="date" name="date" required />
-
-      <label for="passengers">Passengers</label>
-      <input type="number" id="passengers" name="passengers" min="1" max="10" value="1" required />
-
-      <label for="class">Ticket Class</label>
-      <select id="class" name="class" required>
-        <option value="economy" selected>Economy</option>
-        <option value="business">Business</option>
-        <option value="first">First Class</option>
-      </select>
-
-      <div class="kit-selection" id="kitSelection">
-        <p><strong>Select Your Kit:</strong></p>
-        <label><input type="checkbox" name="kit" value="meal" /> Meal Kit</label>
-        <label><input type="checkbox" name="kit" value="entertainment" /> Entertainment Kit</label>
-        <label><input type="checkbox" name="kit" value="comfort" /> Comfort Kit</label>
-        <p class="menu-link" id="viewMenu">View Menu &amp; Amenities</p>
-      </div>
-
-      <button type="submit">Find Flights</button>
-    </form>
-
-    <aside class="upcoming-flights">
-      <h3>Upcoming Scheduled Flights</h3>
-      <ul>
-        <li>May 28, 2025 - Bloxburg to Brookhaven</li>
-        <li>June 2, 2025 - Roblox City to Jailbreak Island</li>
-        <li>June 10, 2025 - Sunny Sands to MeepCity</li>
-        <li>June 15, 2025 - Robloxia Airport to Phantom Forces Base</li>
-      </ul>
-    </aside>
-  </main>
-
-  <footer>
-    <p>🌐 Skyvora Air - Taking Roblox travel to new heights ✈️</p>
-  </footer>
-
-  <!-- Firebase SDKs (compat) -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+    <button type="button" id="viewMenu">View Menu & Amenities</button>
+    <br /><br />
+    <button type="submit">Book Flight</button>
+  </form>
 
   <script>
-    // Your Firebase config (corrected storageBucket)
+    // Firebase config
     const firebaseConfig = {
       apiKey: "AIzaSyC1kkx835D_9JP8uDW9aFCmmYBXaDnfhp0",
       authDomain: "bookings-fc5e4.firebaseapp.com",
@@ -289,59 +91,50 @@
       messagingSenderId: "92935070619",
       appId: "1:92935070619:web:2d70187003a8df21d6b73e"
     };
-
-    // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
 
-    // Show/hide kit selection based on class selection
+    // Elements
     const classSelect = document.getElementById('class');
     const kitSelection = document.getElementById('kitSelection');
     const viewMenu = document.getElementById('viewMenu');
+    const bookingForm = document.getElementById('bookingForm');
 
+    // Show/hide kit selection based on class
     classSelect.addEventListener('change', () => {
       if (classSelect.value === 'first') {
         kitSelection.style.display = 'block';
       } else {
         kitSelection.style.display = 'none';
-        // Uncheck all kit checkboxes when hiding
         document.querySelectorAll('#kitSelection input[type="checkbox"]').forEach(cb => cb.checked = false);
       }
     });
 
-    // View Menu alert popup
+    // Show menu and amenities alert
     viewMenu.addEventListener('click', () => {
-      alert(`Menu & Amenities:\n
-- Meal Kit: Gourmet food & beverages
-- Entertainment Kit: Movies, games & music
-- Comfort Kit: Pillow, blanket & eye mask`);
+      alert(`Menu & Amenities:\n\n- Meal Kit: Gourmet food & beverages\n- Entertainment Kit: Movies, games & music\n- Comfort Kit: Pillow, blanket & eye mask`);
     });
 
-    // Booking form submit
-    const bookingForm = document.getElementById('bookingForm');
-
+    // Handle booking form submit
     bookingForm.addEventListener('submit', (e) => {
       e.preventDefault();
 
-      // Collect form values
       const from = bookingForm.from.value.trim();
       const to = bookingForm.to.value.trim();
       const date = bookingForm.date.value;
       const passengers = parseInt(bookingForm.passengers.value, 10);
       const ticketClass = bookingForm.class.value;
 
-      let kits = [];
-      if (ticketClass === 'first') {
-        kits = Array.from(document.querySelectorAll('#kitSelection input[type="checkbox"]:checked')).map(cb => cb.value);
-      }
-
-      // Simple validation (already done by required attributes but extra safe)
       if (!from || !to || !date || !passengers || !ticketClass) {
         alert('Please fill all required fields.');
         return;
       }
 
-      // Save booking to Firebase Realtime Database under /bookings
+      let kits = [];
+      if (ticketClass === 'first') {
+        kits = Array.from(document.querySelectorAll('#kitSelection input[type="checkbox"]:checked')).map(cb => cb.value);
+      }
+
       const newBookingRef = database.ref('bookings').push();
       newBookingRef.set({
         from,
@@ -360,40 +153,54 @@
       });
     });
 
-    // Admin users list (example)
-    const admins = ['admin', 'staff', 'manager'];
-
-    // Login functionality (simple name check)
+    // Admin login system
     const loginSection = document.getElementById('loginSection');
     const loginButton = document.getElementById('loginButton');
     const usernameInput = document.getElementById('usernameInput');
-
+    const userIdInput = document.getElementById('userIdInput');
     const viewBookingsBtn = document.getElementById('viewBookingsBtn');
     const bookingsSection = document.getElementById('bookingsSection');
     const bookingsList = document.getElementById('bookingsList');
 
+    const adminIDs = ['21131234']; // admin user IDs
+    const adminPassword = '810513'; // admin password
     let loggedInUser = null;
 
     loginButton.addEventListener('click', () => {
-      const username = usernameInput.value.trim().toLowerCase();
-      if (!username) {
-        alert('Please enter your name to login.');
+      const username = usernameInput.value.trim();
+      const userId = userIdInput.value.trim();
+
+      if (!username || !userId) {
+        alert('Please enter both name and user ID.');
         return;
       }
-      loggedInUser = username;
-      loginSection.style.display = 'none';
 
-      if (admins.includes(username)) {
-        viewBookingsBtn.style.display = 'block';
-        alert(`Welcome, ${username}. You have admin access.`);
+      if (adminIDs.includes(userId)) {
+        let attempts = 3;
+        while (attempts > 0) {
+          const pass = prompt('Admin access detected. Enter password:');
+          if (pass === adminPassword) {
+            alert(`Welcome, Admin ${username}.`);
+            loggedInUser = username;
+            loginSection.style.display = 'none';
+            viewBookingsBtn.style.display = 'inline-block';
+            return;
+          } else {
+            attempts--;
+            alert(`Incorrect password. Attempts left: ${attempts}`);
+          }
+        }
+        alert('Access denied. Too many failed attempts.');
       } else {
         alert(`Welcome, ${username}. You can book flights but cannot view bookings.`);
+        loggedInUser = username;
+        loginSection.style.display = 'none';
       }
     });
 
-    // Show bookings when admin clicks the button
+    // Show bookings on button click (admin only)
     viewBookingsBtn.addEventListener('click', () => {
-      if (!loggedInUser || !admins.includes(loggedInUser)) {
+      if (!loggedInUser) {
         alert('You are not authorized to view bookings.');
         return;
       }
@@ -401,10 +208,8 @@
       bookingsSection.style.display = 'block';
       bookingsList.innerHTML = '<li>Loading bookings...</li>';
 
-      // Read bookings from Firebase Realtime Database
       database.ref('bookings').once('value').then(snapshot => {
-        bookingsList.innerHTML = ''; // Clear loading message
-
+        bookingsList.innerHTML = '';
         if (!snapshot.exists()) {
           bookingsList.innerHTML = '<li>No bookings found.</li>';
           return;
@@ -412,14 +217,15 @@
 
         snapshot.forEach(childSnapshot => {
           const booking = childSnapshot.val();
+          // Format date nicely
           const dateStr = new Date(booking.date).toLocaleDateString();
-          const kitsStr = booking.kits && booking.kits.length > 0 ? ` Kits: ${booking.kits.join(', ')}` : '';
+          const kitsStr = booking.kits && booking.kits.length > 0 ? ` | Kits: ${booking.kits.join(', ')}` : '';
           const item = document.createElement('li');
           item.textContent = `${booking.from} → ${booking.to} | Date: ${dateStr} | Passengers: ${booking.passengers} | Class: ${booking.ticketClass}${kitsStr}`;
           bookingsList.appendChild(item);
         });
       }).catch(error => {
-        bookingsList.innerHTML = '<li>Error loading bookings: ' + error.message + '</li>';
+        bookingsList.innerHTML = `<li>Error loading bookings: ${error.message}</li>`;
       });
     });
   </script>
