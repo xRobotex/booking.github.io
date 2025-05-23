@@ -6,6 +6,7 @@
   <title>Skyvora Air - Book Your Flight</title>
   <style>
     /* Your existing styles here... */
+    /* ... (styles unchanged) ... */
     body {
       font-family: 'Comic Sans MS', cursive, sans-serif;
       margin: 0;
@@ -87,7 +88,6 @@
     .booking-form button:hover {
       background-color: #007acc;
     }
-    /* Kit selection section */
     .kit-selection {
       margin-top: 15px;
       padding: 15px;
@@ -101,7 +101,6 @@
       color: #003366;
       margin-right: 15px;
     }
-    /* Upcoming flights section */
     .upcoming-flights {
       max-width: 300px;
       background-color: #ffffff;
@@ -123,7 +122,6 @@
       text-decoration: underline;
       font-size: 0.9rem;
     }
-    /* Footer */
     footer {
       text-align: center;
       padding: 20px;
@@ -132,7 +130,6 @@
       color: #555;
       margin-top: 40px;
     }
-    /* New login and admin button styles */
     #loginSection {
       max-width: 420px;
       margin: 20px auto;
@@ -277,116 +274,154 @@
     <p>🌐 Skyvora Air - Taking Roblox travel to new heights ✈️</p>
   </footer>
 
+  <!-- Firebase SDKs (compat) -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
   <script>
+    // Your Firebase config (corrected storageBucket)
+    const firebaseConfig = {
+      apiKey: "AIzaSyC1kkx835D_9JP8uDW9aFCmmYBXaDnfhp0",
+      authDomain: "bookings-fc5e4.firebaseapp.com",
+      databaseURL: "https://bookings-fc5e4-default-rtdb.firebaseio.com",
+      projectId: "bookings-fc5e4",
+      storageBucket: "bookings-fc5e4.appspot.com",
+      messagingSenderId: "92935070619",
+      appId: "1:92935070619:web:2d70187003a8df21d6b73e"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    // Show/hide kit selection based on class selection
     const classSelect = document.getElementById('class');
     const kitSelection = document.getElementById('kitSelection');
     const viewMenu = document.getElementById('viewMenu');
 
-    // Show kit selection only for Business or First Class
     classSelect.addEventListener('change', () => {
-      if (classSelect.value === 'business' || classSelect.value === 'first') {
+      if (classSelect.value === 'first') {
         kitSelection.style.display = 'block';
       } else {
         kitSelection.style.display = 'none';
-        // Uncheck all kits when hidden
-        kitSelection.querySelectorAll('input[type=checkbox]').forEach(cb => cb.checked = false);
+        // Uncheck all kit checkboxes when hiding
+        document.querySelectorAll('#kitSelection input[type="checkbox"]').forEach(cb => cb.checked = false);
       }
     });
 
-    // Initial check on page load
-    if (classSelect.value === 'business' || classSelect.value === 'first') {
-      kitSelection.style.display = 'block';
-    }
-
-    // Show alert with menu info when clicking the menu link
+    // View Menu alert popup
     viewMenu.addEventListener('click', () => {
-      alert(`Skyvora Air Menu & Amenities:
-
-- Meal Kit: Includes a gourmet meal, drinks, and dessert.
-- Entertainment Kit: Includes headphones, movies, and games.
-- Comfort Kit: Includes a pillow, blanket, and eye mask.
-
-You can pre-select your preferred kits during booking if you choose Business or First Class.`);
+      alert(`Menu & Amenities:\n
+- Meal Kit: Gourmet food & beverages
+- Entertainment Kit: Movies, games & music
+- Comfort Kit: Pillow, blanket & eye mask`);
     });
 
-    // Optional: handle form submission
-    document.getElementById('bookingForm').addEventListener('submit', e => {
+    // Booking form submit
+    const bookingForm = document.getElementById('bookingForm');
+
+    bookingForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      alert('Thank you for booking with Skyvora Air! Your flight search will begin shortly.');
-      // Here you can add real search or submission logic
+
+      // Collect form values
+      const from = bookingForm.from.value.trim();
+      const to = bookingForm.to.value.trim();
+      const date = bookingForm.date.value;
+      const passengers = parseInt(bookingForm.passengers.value, 10);
+      const ticketClass = bookingForm.class.value;
+
+      let kits = [];
+      if (ticketClass === 'first') {
+        kits = Array.from(document.querySelectorAll('#kitSelection input[type="checkbox"]:checked')).map(cb => cb.value);
+      }
+
+      // Simple validation (already done by required attributes but extra safe)
+      if (!from || !to || !date || !passengers || !ticketClass) {
+        alert('Please fill all required fields.');
+        return;
+      }
+
+      // Save booking to Firebase Realtime Database under /bookings
+      const newBookingRef = database.ref('bookings').push();
+      newBookingRef.set({
+        from,
+        to,
+        date,
+        passengers,
+        ticketClass,
+        kits,
+        timestamp: Date.now()
+      }).then(() => {
+        alert('Your flight booking was saved! Thank you for flying with Skyvora Air.');
+        bookingForm.reset();
+        kitSelection.style.display = 'none';
+      }).catch((error) => {
+        alert('Error saving booking: ' + error.message);
+      });
     });
 
-    // === NEW LOGIN & ADMIN ACCESS LOGIC ===
-    const allowedUsers = ["Kyle", "madman"];
-    const loginButton = document.getElementById("loginButton");
-    const usernameInput = document.getElementById("usernameInput");
-    const viewBookingsBtn = document.getElementById("viewBookingsBtn");
-    const bookingsSection = document.getElementById("bookingsSection");
-    const bookingsList = document.getElementById("bookingsList");
-    const loginSection = document.getElementById("loginSection");
+    // Admin users list (example)
+    const admins = ['admin', 'staff', 'manager'];
 
-    loginButton.addEventListener("click", () => {
-      const username = usernameInput.value.trim();
+    // Login functionality (simple name check)
+    const loginSection = document.getElementById('loginSection');
+    const loginButton = document.getElementById('loginButton');
+    const usernameInput = document.getElementById('usernameInput');
 
-      if (allowedUsers.includes(username)) {
-        alert(`Welcome, ${username}! You can view booked flights.`);
-        // Hide login and show the button
-        loginSection.style.display = "none";
-        viewBookingsBtn.style.display = "block";
+    const viewBookingsBtn = document.getElementById('viewBookingsBtn');
+    const bookingsSection = document.getElementById('bookingsSection');
+    const bookingsList = document.getElementById('bookingsList');
+
+    let loggedInUser = null;
+
+    loginButton.addEventListener('click', () => {
+      const username = usernameInput.value.trim().toLowerCase();
+      if (!username) {
+        alert('Please enter your name to login.');
+        return;
+      }
+      loggedInUser = username;
+      loginSection.style.display = 'none';
+
+      if (admins.includes(username)) {
+        viewBookingsBtn.style.display = 'block';
+        alert(`Welcome, ${username}. You have admin access.`);
       } else {
-        alert("Sorry, you do not have permission to view booked flights.");
+        alert(`Welcome, ${username}. You can book flights but cannot view bookings.`);
       }
     });
 
-    viewBookingsBtn.addEventListener("click", () => {
-      if (bookingsSection.style.display === "block") {
-        bookingsSection.style.display = "none";
-        viewBookingsBtn.textContent = "View Booked Flights";
-      } else {
-        bookingsSection.style.display = "block";
-        viewBookingsBtn.textContent = "Hide Booked Flights";
+    // Show bookings when admin clicks the button
+    viewBookingsBtn.addEventListener('click', () => {
+      if (!loggedInUser || !admins.includes(loggedInUser)) {
+        alert('You are not authorized to view bookings.');
+        return;
+      }
 
-        // Fetch or display bookings here
-        // For demo, just dummy bookings:
-        bookingsList.innerHTML = ""; // clear previous
+      bookingsSection.style.display = 'block';
+      bookingsList.innerHTML = '<li>Loading bookings...</li>';
 
-        const dummyBookings = [
-          "Bloxburg → Brookhaven on May 28, 2025",
-          "Roblox City → Jailbreak Island on June 2, 2025",
-          "Sunny Sands → MeepCity on June 10, 2025",
-          "Robloxia Airport → Phantom Forces Base on June 15, 2025",
-        ];
+      // Read bookings from Firebase Realtime Database
+      database.ref('bookings').once('value').then(snapshot => {
+        bookingsList.innerHTML = ''; // Clear loading message
 
-        dummyBookings.forEach(booking => {
-          const li = document.createElement("li");
-          li.textContent = booking;
-          bookingsList.appendChild(li);
+        if (!snapshot.exists()) {
+          bookingsList.innerHTML = '<li>No bookings found.</li>';
+          return;
+        }
+
+        snapshot.forEach(childSnapshot => {
+          const booking = childSnapshot.val();
+          const dateStr = new Date(booking.date).toLocaleDateString();
+          const kitsStr = booking.kits && booking.kits.length > 0 ? ` Kits: ${booking.kits.join(', ')}` : '';
+          const item = document.createElement('li');
+          item.textContent = `${booking.from} → ${booking.to} | Date: ${dateStr} | Passengers: ${booking.passengers} | Class: ${booking.ticketClass}${kitsStr}`;
+          bookingsList.appendChild(item);
         });
-      }
+      }).catch(error => {
+        bookingsList.innerHTML = '<li>Error loading bookings: ' + error.message + '</li>';
+      });
     });
   </script>
 </body>
-  <script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyC1kkx835D_9JP8uDW9aFCmmYBXaDnfhp0",
-    authDomain: "bookings-fc5e4.firebaseapp.com",
-    projectId: "bookings-fc5e4",
-    storageBucket: "bookings-fc5e4.firebasestorage.app",
-    messagingSenderId: "92935070619",
-    appId: "1:92935070619:web:4e989d1307f3cd09d6b73e",
-    measurementId: "G-RV61ZNDYW0"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>
 </html>
