@@ -366,4 +366,27 @@ You can pre-select your preferred kits during booking if you choose Business or 
     });
   </script>
 </body>
+  <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyC1kkx835D_9JP8uDW9aFCmmYBXaDnfhp0",
+    authDomain: "bookings-fc5e4.firebaseapp.com",
+    projectId: "bookings-fc5e4",
+    storageBucket: "bookings-fc5e4.firebasestorage.app",
+    messagingSenderId: "92935070619",
+    appId: "1:92935070619:web:4e989d1307f3cd09d6b73e",
+    measurementId: "G-RV61ZNDYW0"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
 </html>
