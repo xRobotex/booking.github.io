@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Skyvora Air - Book Your Flight</title>
+  <style>
+    /* Your existing styles here... */
+    body {
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to right, #e0f7fa, #f1f8ff);
+      color: #333;
+    }
+    header {
+      background-color: #66ccff;
+      padding: 20px;
+      text-align: center;
+      border-bottom: 4px solid #004d99;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2.8rem;
+      color: #ffffff;
+      text-shadow: 1px 1px 2px #004d99;
+    }
+    header p {
+      margin: 5px 0 0;
+      font-size: 1.1rem;
+      color: #f0faff;
+    }
+    .booking-section {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px 20px;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+    .booking-form {
+      background-color: #ffffff;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 420px;
+    }
+    .booking-form h2 {
+      margin-bottom: 20px;
+      color: #003366;
+    }
+    .booking-form label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+      color: #005580;
+    }
+    .booking-form input,
+    .booking-form select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 2px solid #cce7ff;
+      border-radius: 12px;
+      font-size: 1rem;
+      transition: border 0.2s ease;
+      outline: none;
+    }
+    .booking-form input:focus,
+    .booking-form select:focus {
+      border-color: #3399ff;
+    }
+    .booking-form button {
+      margin-top: 25px;
+      width: 100%;
+      padding: 12px;
+      background-color: #3399ff;
+      border: none;
+      border-radius: 14px;
+      color: white;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .booking-form button:hover {
+      background-color: #007acc;
+    }
+    /* Kit selection section */
+    .kit-selection {
+      margin-top: 15px;
+      padding: 15px;
+      border: 1px solid #3399ff;
+      border-radius: 12px;
+      background-color: #e6f2ff;
+      display: none;
+    }
+    .kit-selection label {
+      font-weight: normal;
+      color: #003366;
+      margin-right: 15px;
+    }
+    /* Upcoming flights section */
+    .upcoming-flights {
+      max-width: 300px;
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      font-size: 0.95rem;
+      color: #003366;
+    }
+    .upcoming-flights h3 {
+      margin-top: 0;
+      color: #004d99;
+    }
+    .menu-link {
+      margin-top: 10px;
+      display: inline-block;
+      color: #007acc;
+      cursor: pointer;
+      text-decoration: underline;
+      font-size: 0.9rem;
+    }
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 0.9rem;
+      background-color: #f1f1f1;
+      color: #555;
+      margin-top: 40px;
+    }
+    /* New login and admin button styles */
+    #loginSection {
+      max-width: 420px;
+      margin: 20px auto;
+      padding: 15px 20px;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      font-size: 1rem;
+      color: #003366;
+      text-align: center;
+    }
+    #loginSection input {
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 2px solid #cce7ff;
+      font-size: 1rem;
+      margin-right: 8px;
+      width: 180px;
+      outline: none;
+      transition: border 0.2s ease;
+    }
+    #loginSection input:focus {
+      border-color: #3399ff;
+    }
+    #loginSection button {
+      padding: 9px 16px;
+      background-color: #3399ff;
+      border: none;
+      border-radius: 12px;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 1rem;
+      transition: background-color 0.3s ease;
+    }
+    #loginSection button:hover {
+      background-color: #007acc;
+    }
+    #viewBookingsBtn {
+      display: none;
+      margin: 20px auto;
+      padding: 12px 24px;
+      background-color: #3399ff;
+      border: none;
+      border-radius: 14px;
+      color: white;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      max-width: 420px;
+      display: block;
+      text-align: center;
+    }
+    #viewBookingsBtn:hover {
+      background-color: #007acc;
+    }
+    #bookingsSection {
+      max-width: 420px;
+      margin: 0 auto 40px auto;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      padding: 20px;
+      color: #003366;
+      display: none;
+    }
+    #bookingsSection h3 {
+      margin-top: 0;
+      color: #004d99;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🛫 Skyvora Air</h1>
+    <p>Reach the skies of Robloxia with style!</p>
+  </header>
+
+  <!-- LOGIN SECTION -->
+  <div id="loginSection">
+    <label for="usernameInput">Enter your name:</label>
+    <input type="text" id="usernameInput" placeholder="Your name" />
+    <button id="loginButton">Login</button>
+  </div>
+
+  <!-- BUTTON VISIBLE ONLY TO ADMINS -->
+  <button id="viewBookingsBtn">View Booked Flights</button>
+
+  <!-- BOOKINGS DISPLAY SECTION -->
+  <div id="bookingsSection">
+    <h3>Booked Flights</h3>
+    <ul id="bookingsList"></ul>
+  </div>
+
+  <main class="booking-section">
+    <form class="booking-form" id="bookingForm">
+      <h2>Book Your Flight</h2>
+
+      <label for="from">From</label>
+      <input type="text" id="from" name="from" placeholder="e.g., Bloxburg" required />
+
+      <label for="to">To</label>
+      <input type="text" id="to" name="to" placeholder="e.g., Brookhaven" required />
+
+      <label for="date">Departure Date</label>
+      <input type="date" id="date" name="date" required />
+
+      <label for="passengers">Passengers</label>
+      <input type="number" id="passengers" name="passengers" min="1" max="10" value="1" required />
+
+      <label for="class">Ticket Class</label>
+      <select id="class" name="class" required>
+        <option value="economy" selected>Economy</option>
+        <option value="business">Business</option>
+        <option value="first">First Class</option>
+      </select>
+
+      <div class="kit-selection" id="kitSelection">
+        <p><strong>Select Your Kit:</strong></p>
+        <label><input type="checkbox" name="kit" value="meal" /> Meal Kit</label>
+        <label><input type="checkbox" name="kit" value="entertainment" /> Entertainment Kit</label>
+        <label><input type="checkbox" name="kit" value="comfort" /> Comfort Kit</label>
+        <p class="menu-link" id="viewMenu">View Menu &amp; Amenities</p>
+      </div>
+
+      <button type="submit">Find Flights</button>
+    </form>
+
+    <aside class="upcoming-flights">
+      <h3>Upcoming Scheduled Flights</h3>
+      <ul>
+        <li>May 28, 2025 - Bloxburg to Brookhaven</li>
+        <li>June 2, 2025 - Roblox City to Jailbreak Island</li>
+        <li>June 10, 2025 - Sunny Sands to MeepCity</li>
+        <li>June 15, 2025 - Robloxia Airport to Phantom Forces Base</li>
+      </ul>
+    </aside>
+  </main>
+
+  <footer>
+    <p>🌐 Skyvora Air - Taking Roblox travel to new heights ✈️</p>
+  </footer>
+
+  <script>
+    const classSelect = document.getElementById('class');
+    const kitSelection = document.getElementById('kitSelection');
+    const viewMenu = document.getElementById('viewMenu');
+
+    // Show kit selection only for Business or First Class
+    classSelect.addEventListener('change', () => {
+      if (classSelect.value === 'business' || classSelect.value === 'first') {
+        kitSelection.style.display = 'block';
+      } else {
+        kitSelection.style.display = 'none';
+        // Uncheck all kits when hidden
+        kitSelection.querySelectorAll('input[type=checkbox]').forEach(cb => cb.checked = false);
+      }
+    });
+
+    // Initial check on page load
+    if (classSelect.value === 'business' || classSelect.value === 'first') {
+      kitSelection.style.display = 'block';
+    }
+
+    // Show alert with menu info when clicking the menu link
+    viewMenu.addEventListener('click', () => {
+      alert(`Skyvora Air Menu & Amenities:
+
+- Meal Kit: Includes a gourmet meal, drinks, and dessert.
+- Entertainment Kit: Includes headphones, movies, and games.
+- Comfort Kit: Includes a pillow, blanket, and eye mask.
+
+You can pre-select your preferred kits during booking if you choose Business or First Class.`);
+    });
+
+    // Optional: handle form submission
+    document.getElementById('bookingForm').addEventListener('submit', e => {
+      e.preventDefault();
+      alert('Thank you for booking with Skyvora Air! Your flight search will begin shortly.');
+      // Here you can add real search or submission logic
+    });
+
+    // === NEW LOGIN & ADMIN ACCESS LOGIC ===
+    const allowedUsers = ["Kyle", "madman"];
+    const loginButton = document.getElementById("loginButton");
+    const usernameInput = document.getElementById("usernameInput");
+    const viewBookingsBtn = document.getElementById("viewBookingsBtn");
+    const bookingsSection = document.getElementById("bookingsSection");
+    const bookingsList = document.getElementById("bookingsList");
+    const loginSection = document.getElementById("loginSection");
+
+    loginButton.addEventListener("click", () => {
+      const username = usernameInput.value.trim();
+
+      if (allowedUsers.includes(username)) {
+        alert(`Welcome, ${username}! You can view booked flights.`);
+        // Hide login and show the button
+        loginSection.style.display = "none";
+        viewBookingsBtn.style.display = "block";
+      } else {
+        alert("Sorry, you do not have permission to view booked flights.");
+      }
+    });
+
+    viewBookingsBtn.addEventListener("click", () => {
+      if (bookingsSection.style.display === "block") {
+        bookingsSection.style.display = "none";
+        viewBookingsBtn.textContent = "View Booked Flights";
+      } else {
+        bookingsSection.style.display = "block";
+        viewBookingsBtn.textContent = "Hide Booked Flights";
+
+        // Fetch or display bookings here
+        // For demo, just dummy bookings:
+        bookingsList.innerHTML = ""; // clear previous
+
+        const dummyBookings = [
+          "Bloxburg → Brookhaven on May 28, 2025",
+          "Roblox City → Jailbreak Island on June 2, 2025",
+          "Sunny Sands → MeepCity on June 10, 2025",
+          "Robloxia Airport → Phantom Forces Base on June 15, 2025",
+        ];
+
+        dummyBookings.forEach(booking => {
+          const li = document.createElement("li");
+          li.textContent = booking;
+          bookingsList.appendChild(li);
+        });
+      }
+    });
+  </script>
+</body>
+</html>
