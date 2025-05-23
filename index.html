@@ -394,34 +394,37 @@ h1 {
 
     // Show bookings on button click (admin only)
     viewBookingsBtn.addEventListener('click', () => {
-      if (!loggedInUser) {
-        alert('You are not authorized to view bookings.');
-        return;
-      }
+  if (!loggedInUser) {
+    alert('You are not authorized to view bookings.');
+    return;
+  }
 
-      bookingsSection.style.display = 'block';
-      bookingsList.innerHTML = '<li>Loading bookings...</li>';
+  bookingsSection.style.display = 'block';
+  bookingsList.innerHTML = '<li>Loading bookings...</li>';
 
-      database.ref('bookings').once('value').then(snapshot => {
-        bookingsList.innerHTML = '';
-        if (!snapshot.exists()) {
-          bookingsList.innerHTML = '<li>No bookings found.</li>';
-          return;
-        }
+  database.ref('bookings').once('value').then(snapshot => {
+    console.log('Bookings snapshot:', snapshot.val());  // <-- Add this line
+    bookingsList.innerHTML = '';
+    if (!snapshot.exists()) {
+      bookingsList.innerHTML = '<li>No bookings found.</li>';
+      return;
+    }
 
-        snapshot.forEach(childSnapshot => {
-          const booking = childSnapshot.val();
-          // Format date nicely
-          const dateStr = new Date(booking.date).toLocaleDateString();
-          const kitsStr = booking.kits && booking.kits.length > 0 ? ` | Kits: ${booking.kits.join(', ')}` : '';
-          const item = document.createElement('li');
-          item.textContent = `${booking.from} → ${booking.to} | Date: ${dateStr} | Passengers: ${booking.passengers} | Class: ${booking.ticketClass}${kitsStr}`;
-          bookingsList.appendChild(item);
-        });
-      }).catch(error => {
-        bookingsList.innerHTML = `<li>Error loading bookings: ${error.message}</li>`;
-      });
+    snapshot.forEach(childSnapshot => {
+      const booking = childSnapshot.val();
+      console.log('Booking:', booking);  // <-- And this line
+
+      const dateStr = new Date(booking.date).toLocaleDateString();
+      const kitsStr = booking.kits && booking.kits.length > 0 ? ` | Kits: ${booking.kits.join(', ')}` : '';
+      const item = document.createElement('li');
+      item.textContent = `${booking.from} → ${booking.to} | Date: ${dateStr} | Passengers: ${booking.passengers} | Class: ${booking.ticketClass}${kitsStr}`;
+      bookingsList.appendChild(item);
     });
+  }).catch(error => {
+    bookingsList.innerHTML = `<li>Error loading bookings: ${error.message}</li>`;
+  });
+});
+
   </script>
 </body>
 </html>
